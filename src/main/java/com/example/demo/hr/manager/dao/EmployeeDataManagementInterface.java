@@ -22,7 +22,7 @@ public interface EmployeeDataManagementInterface {
 	public UUID addEmployee(@NotEmpty UUID id, @NotEmpty EmployeeData employee) throws IOException;
 
 	// returns the employeeID of the added employee;
-	public UUID editEmployee(@NotEmpty UUID employeeID, @NotEmpty EmployeeData employee);
+	public UUID editEmployee(@NotEmpty UUID employeeID, @NotEmpty EmployeeData employee) throws IOException;
 
 	default public UUID editEmployee(@NotNull EmployeeData employee) throws IOException {
 		UUID id = employee.getEmployeeID();
@@ -42,6 +42,5 @@ public interface EmployeeDataManagementInterface {
 	// returns all employees sorted
 	public SortedSet<EmployeeData> listAlphabetically();
 
-	public EmployeeData findEmployee(UUID id);
-
+	public EmployeeData findEmployee(UUID id) throws IOException;
 }

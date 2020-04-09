@@ -48,12 +48,13 @@ public class ManagementServiceController {
 	}
 
 	@PostMapping(path = "/edit/{id}")
-	public UUID editEmployee(@PathVariable("id") UUID employeeID, @RequestBody EmployeeData employee) {
+	public UUID editEmployee(@PathVariable("id") UUID employeeID, @RequestBody EmployeeData employee)
+			throws IOException {
 		return managementService.editEmployee(employeeID, employee);
 	}
 
 	@PostMapping(path = "/bulkEdit")
-	public List<UUID> bulkEdit(@RequestBody List<EmployeeData> employees) {
+	public List<UUID> bulkEdit(@RequestBody List<EmployeeData> employees) throws IOException {
 		return managementService.bulkEdit(employees);
 	}
 

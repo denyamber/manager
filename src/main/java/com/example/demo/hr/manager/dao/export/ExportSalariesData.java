@@ -24,6 +24,7 @@ public class ExportSalariesData implements com.example.demo.hr.manager.dao.expor
 			addColumnValueInScvFileFormat(currentEmployee.getLastName(), scvFileFormatBuilder, false);
 			addColumnValueInScvFileFormat("" + currentEmployee.getGrossSalary(), scvFileFormatBuilder, false);
 			addColumnValueInScvFileFormat("" + currentEmployee.getPercentOfTaxes() + "%", scvFileFormatBuilder, false);
+			currentEmployee.recalculateNetSalary();
 			addColumnValueInScvFileFormat("" + currentEmployee.getNetSalary(), scvFileFormatBuilder, true);
 		}
 		return scvFileFormatBuilder.toString();

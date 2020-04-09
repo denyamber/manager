@@ -29,7 +29,7 @@ public class ManagerService {
 		return managerInterface.addEmployee(employee);
 	}
 
-	public UUID editEmployee(UUID employeeID, EmployeeData employee) {
+	public UUID editEmployee(UUID employeeID, EmployeeData employee) throws IOException {
 		return managerInterface.editEmployee(employeeID, employee);
 	}
 
@@ -37,10 +37,18 @@ public class ManagerService {
 		managerInterface.deleteEmployee(employeeID);
 	}
 
-	public List<UUID> bulkEdit(@NotEmpty List<EmployeeData> employees) {
+	public List<UUID> bulkEdit(@NotEmpty List<EmployeeData> employees) throws IOException {
 		List<UUID> updated = new ArrayList<>();
+		String errorMessage = "";
 		for (EmployeeData person : employees) {
-			updated.add(editEmployee(person.getEmployeeID(), person));
+			try {
+				updated.add(editEmployee(person.getEmployeeID(), person));
+			} catch (IOException e) {
+				errorMessage += e.getMessage() + " ";
+			}
+		}
+		if (!errorMessage.isEmpty()) {
+			throw new IOException(errorMessage);
 		}
 		return updated;
 	}
@@ -83,9 +91,8 @@ public class ManagerService {
 		return managerInterface.fetchLatestEmployees(count);
 	}
 
-	public EmployeeData findEmployee(UUID id) {
+	public EmployeeData findEmployee(UUID id) throws IOException {
 		return managerInterface.findEmployee(id);
 	}
-	
-	
+
 }

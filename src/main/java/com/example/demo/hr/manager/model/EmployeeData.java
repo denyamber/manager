@@ -16,8 +16,6 @@ public class EmployeeData {
 	@JsonProperty("last_name")
 	private String lastName;
 	@NotEmpty
-	// DAE add regular expression as validation
-	// private String egn;
 	@JsonProperty("address")
 	private String address;
 	@JsonProperty("country")
@@ -32,8 +30,8 @@ public class EmployeeData {
 	@NotEmpty
 	@JsonProperty("taxes")
 	private double percentOfTaxes;
-//	@Range(min = 0)
-//	private double netSalary;
+	@JsonProperty("net_salary")
+	private double netSalary;
 	@JsonProperty("id")
 	private UUID employeeID;
 
@@ -109,8 +107,16 @@ public class EmployeeData {
 		this.percentOfTaxes = percentOfTaxes;
 	}
 
+	public void setNetSalary(double netSalary) {
+		this.netSalary = netSalary;
+	}
+
 	public double getNetSalary() {
-		return calculateNetSalaryFromGrossSalary(this.grossSalary, this.percentOfTaxes);
+		return this.netSalary;
+	}
+
+	public void recalculateNetSalary() {
+		this.netSalary = calculateNetSalaryFromGrossSalary(this.grossSalary, this.percentOfTaxes);
 	}
 
 	public static double calculateNetSalaryFromGrossSalary(double fromGrossAmount, double withTaxPercentige) {

@@ -42,16 +42,24 @@ public class InMemoryImplementation implements EmployeeDataManagementInterface {
 	}
 
 	@Override
-	public UUID editEmployee(UUID employeeID, EmployeeData employee) {
-		inMemoryDB.replace(employeeID, employee);
+	public UUID editEmployee(UUID employeeID, EmployeeData employee) throws IOException {
+		employee.setEmployeeID(employeeID);
+		employee.recalculateNetSalary();
+		if (inMemoryDB.get(employeeID) != null) {
+			inMemoryDB.replace(employeeID, employee);
+		} else {
+			throw new IOException("Employee with id \"" + employeeID + "\" not found");
+		}
 		return employeeID;
 	}
 
 	@Override
 	public void deleteEmployee(UUID employeeID) throws IOException {
 		String fullName = inMemoryDB.get(employeeID).getFullName();
-		inMemoryDB.remove(employeeID);
-		employeeNames.remove(fullName);
+		if (fullName != null) {
+			inMemoryDB.remove(employeeID);
+			employeeNames.remove(fullName);
+		}
 	}
 
 	@Override
@@ -62,8 +70,7 @@ public class InMemoryImplementation implements EmployeeDataManagementInterface {
 		if (size > count) {
 			LinkedList<EmployeeData> values = new LinkedList<>();
 			values.addAll(inMemoryDB.values());
-			values = (LinkedList<EmployeeData>) values.subList(size - count - 1, size - 1);
-			dbIterator = values.iterator();
+			dbIterator = values.subList(size - count - 1, size - 1).iterator();
 		}
 		while (dbIterator.hasNext()) {
 			result.add(dbIterator.next());
@@ -89,7 +96,10 @@ public class InMemoryImplementation implements EmployeeDataManagementInterface {
 	}
 
 	@Override
-	public EmployeeData findEmployee(UUID id) {
+	public EmployeeData findEmployee(UUID id) throws IOException {
+		if (!inMemoryDB.containsKey(id)) {
+			throw new IOException("Employee not found.");
+		}
 		return inMemoryDB.get(id);
 	}
 
