@@ -1,12 +1,15 @@
 package com.example.demo.hr.manager.dao;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -20,10 +23,18 @@ public class InMemoryImplementation implements EmployeeDataManagementInterface {
 
 	private final Map<UUID, EmployeeData> inMemoryDB = Collections.synchronizedMap(new LinkedHashMap<>());
 
+	private final Set<String> employeeNames = new HashSet<>();
+
 	@Override
-	public UUID addEmployee(UUID id, EmployeeData employee) {
+	public UUID addEmployee(UUID id, EmployeeData employee) throws IOException {
 		if (id == null) {
 			id = addEmployee(employee);
+		}
+		String fullName = employee.getFullName();
+		if (employeeNames.contains(fullName)) {
+			throw new IOException("Employee with name " + employee.getFullName() + " already exists in the system.");
+		} else {
+			employeeNames.add(fullName);
 		}
 		employee.setEmployeeID(id);
 		inMemoryDB.put(id, employee);
@@ -37,8 +48,10 @@ public class InMemoryImplementation implements EmployeeDataManagementInterface {
 	}
 
 	@Override
-	public void deleteEmployee(UUID employeeID) {
+	public void deleteEmployee(UUID employeeID) throws IOException {
+		String fullName = inMemoryDB.get(employeeID).getFullName();
 		inMemoryDB.remove(employeeID);
+		employeeNames.remove(fullName);
 	}
 
 	@Override
@@ -63,12 +76,21 @@ public class InMemoryImplementation implements EmployeeDataManagementInterface {
 		SortedSet<EmployeeData> sortedSet = new TreeSet<EmployeeData>(new Comparator<EmployeeData>() {
 			@Override
 			public int compare(EmployeeData o1, EmployeeData o2) {
-				return o1.getFullName().compareTo(o2.getFullName());
+				int result = o1.getFullName().compareTo(o2.getFullName());
+				if (result == 0) {
+					result = o1.getEmployeeID().compareTo(o2.getEmployeeID());
+				}
+				return result;
 			}
 
 		});
 		sortedSet.addAll(inMemoryDB.values());
 		return sortedSet;
+	}
+
+	@Override
+	public EmployeeData findEmployee(UUID id) {
+		return inMemoryDB.get(id);
 	}
 
 }

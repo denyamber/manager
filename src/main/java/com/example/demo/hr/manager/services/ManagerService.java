@@ -1,5 +1,6 @@
 package com.example.demo.hr.manager.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -24,7 +25,7 @@ public class ManagerService {
 		this.managerInterface = managerInterface;
 	}
 
-	public UUID addEmployee(EmployeeData employee) {
+	public UUID addEmployee(EmployeeData employee) throws IOException {
 		return managerInterface.addEmployee(employee);
 	}
 
@@ -32,7 +33,7 @@ public class ManagerService {
 		return managerInterface.editEmployee(employeeID, employee);
 	}
 
-	public void deleteEmployee(UUID employeeID) {
+	public void deleteEmployee(UUID employeeID) throws IOException {
 		managerInterface.deleteEmployee(employeeID);
 	}
 
@@ -44,16 +45,32 @@ public class ManagerService {
 		return updated;
 	}
 
-	public void bulkDelete(@NotEmpty List<UUID> ids) {
+	public void bulkDelete(@NotEmpty List<UUID> ids) throws IOException {
+		String errorMessage = "";
 		for (UUID id : ids) {
-			deleteEmployee(id);
+			try {
+				deleteEmployee(id);
+			} catch (IOException e) {
+				errorMessage += e.getMessage() + " ";
+			}
+		}
+		if (!errorMessage.isEmpty()) {
+			throw new IOException(errorMessage);
 		}
 	}
 
-	public List<UUID> bulkAdd(@NotEmpty List<EmployeeData> employees) {
+	public List<UUID> bulkAdd(@NotEmpty List<EmployeeData> employees) throws IOException {
 		ArrayList<UUID> ids = new ArrayList<>();
+		String errorMessage = "";
 		for (EmployeeData person : employees) {
-			ids.add(addEmployee(person));
+			try {
+				ids.add(addEmployee(person));
+			} catch (IOException e) {
+				errorMessage += e.getMessage() + " ";
+			}
+		}
+		if (!errorMessage.isEmpty()) {
+			throw new IOException(errorMessage);
 		}
 		return ids;
 	}
@@ -65,4 +82,10 @@ public class ManagerService {
 	public List<EmployeeData> fetchLatestEmployees(int count) {
 		return managerInterface.fetchLatestEmployees(count);
 	}
+
+	public EmployeeData findEmployee(UUID id) {
+		return managerInterface.findEmployee(id);
+	}
+	
+	
 }
