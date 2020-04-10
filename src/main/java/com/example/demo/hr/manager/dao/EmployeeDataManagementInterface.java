@@ -1,6 +1,7 @@
 package com.example.demo.hr.manager.dao;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.UUID;
@@ -43,6 +44,13 @@ public interface EmployeeDataManagementInterface {
 	public SortedSet<EmployeeData> listAlphabetically();
 
 	public EmployeeData findEmployee(UUID id) throws IOException;
-	
-	public void calculateNetSalary();
+
+	default public void calculateNetSalary() throws IOException {
+		Iterator<EmployeeData> allValues = listAlphabetically().iterator();
+		while (allValues.hasNext()) {
+			EmployeeData data = allValues.next();
+			data.recalculateNetSalary();
+			editEmployee(data);
+		}
+	}
 }

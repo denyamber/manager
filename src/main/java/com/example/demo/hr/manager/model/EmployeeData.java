@@ -2,37 +2,53 @@ package com.example.demo.hr.manager.model;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.Table;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties
+@EntityListeners(AuditingEntityListener.class)
+@Table(appliesTo = "employees")
 public class EmployeeData {
 	@NotEmpty
 	@JsonProperty("first_name")
+	@Column(name = "first_name")
 	private String firstName;
 	@NotEmpty
 	@JsonProperty("last_name")
+	@Column(name = "last_name")
 	private String lastName;
-	@NotEmpty
 	@JsonProperty("address")
+	@Column(name = "address")
 	private String address;
 	@JsonProperty("country")
+	@Column(name = "country")
 	private String country;
 	@JsonProperty("postal_code")
+	@Column(name = "postal_code")
 	private String postalCode;
-	@JsonProperty("phone")
+	@JsonProperty("phone_number")
+	@Column(name = "phone_number")
 	private String phoneNumber;
 	@NotEmpty
-	@JsonProperty("gross")
+	@JsonProperty("gross_salary")
+	@Column(name = "gross_salary")
 	private double grossSalary;
 	@NotEmpty
 	@JsonProperty("taxes")
+	@Column(name = "taxes")
 	private double percentOfTaxes;
 	@JsonProperty("net_salary")
+	@Column(name = "net_salary")
 	private double netSalary;
 	@JsonProperty("id")
+	@Column(name = "id", nullable = false, unique = true)
 	private UUID employeeID;
 
 	public String getFirstName() {

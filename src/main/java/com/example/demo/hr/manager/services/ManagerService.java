@@ -21,7 +21,7 @@ public class ManagerService {
 	private final EmployeeDataManagementInterface managerInterface;
 
 	@Autowired
-	public ManagerService(@Qualifier("inMemory") EmployeeDataManagementInterface managerInterface) {
+	public ManagerService(@Qualifier("postgress") EmployeeDataManagementInterface managerInterface) {
 		this.managerInterface = managerInterface;
 	}
 
@@ -95,7 +95,7 @@ public class ManagerService {
 		return managerInterface.findEmployee(id);
 	}
 
-	public void recalculateNetSalaries() {
+	public void recalculateNetSalaries() throws IOException {
 		managerInterface.calculateNetSalary();
 	}
 }

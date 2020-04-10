@@ -103,12 +103,4 @@ public class InMemoryImplementation implements EmployeeDataManagementInterface {
 		return inMemoryDB.get(id);
 	}
 
-	@Override
-	public void calculateNetSalary() {
-		Iterator<EmployeeData> allValues = inMemoryDB.values().iterator();
-		while (allValues.hasNext()) {
-			allValues.next().recalculateNetSalary();
-		}
-	}
-
 }

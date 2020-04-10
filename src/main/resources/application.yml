@@ -1,0 +1,13 @@
+app:
+  datasource:
+    jdbc-url: jdbc:postgresql://localhost:5432/manager
+    username: postgres
+    password: admin1234
+    pool-size: 30
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: update

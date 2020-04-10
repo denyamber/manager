@@ -29,7 +29,11 @@ public class ManagerView extends VerticalLayout {
 		this.grid = new Grid<>(EmployeeData.class);
 		HorizontalLayout buttonsLayout = new HorizontalLayout();
 		buttonsLayout.add(new Button("Recalculate NetSalary", event -> {
-			managerService.recalculateNetSalaries();
+			try {
+				managerService.recalculateNetSalaries();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			grid.setItems(managerService.listAlphabetically());
 		}));
 		Button button = new Button("Click to download Salaries as CSV");
