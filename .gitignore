@@ -1,6 +1,9 @@
 HELP.md
 .gradle
-build/
+build/*
+node_modules/*
+bin/*
+target/*
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
@@ -30,3 +33,7 @@ out/
 
 ### VS Code ###
 .vscode/
+package.json
+package-lock.json
+webpack.config.js
+webpack.generated.js
