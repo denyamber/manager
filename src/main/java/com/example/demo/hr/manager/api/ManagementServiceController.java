@@ -25,12 +25,14 @@ import com.example.demo.hr.manager.model.EmployeeData;
 import com.example.demo.hr.manager.services.ExportSalariesService;
 import com.example.demo.hr.manager.services.ManagerService;
 
+import feign.RequestLine;
+
 @RequestMapping("/api/v1/manager")
 @RestController
 public class ManagementServiceController {
 	private final ManagerService managementService;
 	private final ExportSalariesService exportService;
-
+	
 	@Autowired
 	public ManagementServiceController(ManagerService service, ExportSalariesService exportService) {
 		this.managementService = service;
@@ -77,7 +79,7 @@ public class ManagementServiceController {
 	public List<EmployeeData> fetchLatestEmployees(@PathVariable("count") int count) {
 		return managementService.fetchLatestEmployees(count);
 	}
-
+	
 	@GetMapping(path = "/export")
 	public ResponseEntity<Object> exportSalariesData() {
 		FileInputStream resultFileInputStream = null;

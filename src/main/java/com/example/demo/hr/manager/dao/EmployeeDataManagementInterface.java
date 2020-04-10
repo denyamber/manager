@@ -43,4 +43,6 @@ public interface EmployeeDataManagementInterface {
 	public SortedSet<EmployeeData> listAlphabetically();
 
 	public EmployeeData findEmployee(UUID id) throws IOException;
+	
+	public void calculateNetSalary();
 }

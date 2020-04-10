@@ -95,4 +95,7 @@ public class ManagerService {
 		return managerInterface.findEmployee(id);
 	}
 
+	public void recalculateNetSalaries() {
+		managerInterface.calculateNetSalary();
+	}
 }
